@@ -1,23 +1,39 @@
 import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {signUp} from "../api/authService.ts";
+import axios from "axios";
+import toast from "react-hot-toast"
 
 function SignUp() {
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
 
-    const handleSignUp = (error) => {
+    const handleSignUp = async (error : React.FormEvent) => {
         error.preventDefault();
         if (!name || !email || !password || !confirmPassword) {
             setError('Please fill in all fields');
         } else if (password !== confirmPassword) {
             setError('Passwords do not match');
         } else {
-            setError('');
-            console.log('Sign-up attempted with:', { name, email, password });
+            try {
+                const user = await signUp({ name, email, password, role: "staff" });
+                if (user.message) {
+                    navigate("/");
+                }
+            } catch (error) {
+                if (axios.isAxiosError(error)) {
+                    toast.error(error.message)
+                } else {
+                    setError("Something went wrong");
+                    toast.error("Something went wrong")
+                }
+            }
         }
+
     };
 
     return (
@@ -36,7 +52,7 @@ function SignUp() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                         <input
                             type="text"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
+                            className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
@@ -48,7 +64,7 @@ function SignUp() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                         <input
                             type="email"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
+                            className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -60,7 +76,7 @@ function SignUp() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                         <input
                             type="password"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
+                            className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
@@ -72,7 +88,7 @@ function SignUp() {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
                         <input
                             type="password"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
+                            className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             required

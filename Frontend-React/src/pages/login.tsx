@@ -3,13 +3,13 @@ import {Link, useNavigate} from "react-router-dom";
 import {login} from "../api/authService.ts";
 import {useAuth} from "../context/useAuth.ts";
 import axios from "axios";
-import {toast} from "react-toastify";
+import toast from "react-hot-toast"
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    // const [error, setError] = useState("");
+    const [error, setError] = useState("");
     const { login: authenticate } = useAuth()
 
     const handleLogin = async (e: React.FormEvent) => {
@@ -22,8 +22,10 @@ const Login: React.FC = () => {
             navigate("/dashboard");
         } catch (error) {
             if (axios.isAxiosError(error)) {
+                console.log("axios")
                 toast.error(error.message)
             } else {
+                setError("Something went wrong");
                 toast.error("Something went wrong")
             }
         }
@@ -37,18 +39,18 @@ const Login: React.FC = () => {
 
                 <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">Library Login</h2>
 
-                {/*{error && (*/}
-                {/*    <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-6 text-sm animate-pulse">*/}
-                {/*        {error}*/}
-                {/*    </div>*/}
-                {/*)}*/}
+                {error && (
+                    <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-6 text-sm animate-pulse">
+                        {error}
+                    </div>
+                )}
 
                 <form onSubmit={handleLogin}>
                     <div className="mb-5">
                         <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                         <input
                             type="email"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
+                            className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -60,7 +62,7 @@ const Login: React.FC = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                         <input
                             type="password"
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
+                            className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
