@@ -1,0 +1,34 @@
+import React from 'react';
+import Navbar from '../component/Navbar';
+
+const Dashboard: React.FC = () => {
+    return (
+        <div className="min-h-screen w-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 px-4">
+            <Navbar />
+            <div className="max-w-6xl mx-auto p-6">
+                <div className="relative bg-white p-10 rounded-2xl shadow-2xl transform transition-all hover:scale-105 hover:shadow-3xl duration-300 mb-8">
+                    <h1 className="text-3xl font-extrabold mb-4 text-center text-gray-800">📊 Welcome to Your Dashboard</h1>
+                    <p className="text-gray-600 text-lg text-center">
+                        Here you can manage books, readers, lendings, and more.
+                    </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="relative bg-white p-6 rounded-2xl shadow-2xl transform transition-all hover:scale-105 hover:shadow-3xl duration-300">
+                        <h2 className="text-xl font-extrabold text-gray-800 mb-2">📚 Total Books</h2>
+                        <p className="text-gray-600">120</p>
+                    </div>
+                    <div className="relative bg-white p-6 rounded-2xl shadow-2xl transform transition-all hover:scale-105 hover:shadow-3xl duration-300">
+                        <h2 className="text-xl font-extrabold text-gray-800 mb-2">👥 Registered Readers</h2>
+                        <p className="text-gray-600">45</p>
+                    </div>
+                    <div className="relative bg-white p-6 rounded-2xl shadow-2xl transform transition-all hover:scale-105 hover:shadow-3xl duration-300">
+                        <h2 className="text-xl font-extrabold text-gray-800 mb-2">⏳ Books Lent Out</h2>
+                        <p className="text-gray-600">27</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Dashboard;

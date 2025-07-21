@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/login";
 import SignUp from "./pages/signUp.tsx";
+import Dashboard from "./pages/Dashboard.tsx";
+import BookPage from "./pages/BookPage.tsx";
+import ReaderPage from "./pages/ReaderPage.tsx";
 
 function App() {
     return (
@@ -8,8 +11,10 @@ function App() {
             <Routes>
                 <Route path="/" element={<Login />} />
                 {/* Future protected route */}
-                <Route path="/dashboard" element={<h1>Dashboard</h1>} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/signup" element={<SignUp />} />
+                <Route path="/books" element={<BookPage />} />
+                <Route path="/readers" element={<ReaderPage />} />
             </Routes>
         </Router>
     );
