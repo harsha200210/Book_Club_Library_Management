@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Navbar from '../component/Navbar';
-import {createBook, deleteBook, getAllBooks, updateBook} from "../api/bookService.ts";
+import {createBook, deleteBook, updateBook} from "../api/bookService.ts";
+import {useLibrary} from "../context/useLibrary.ts";
+import type {Book} from "../types/Book.ts";
 
-interface Book {
-    _id?: string;
-    title: string;
-    author: string;
-    genre: string;
-    isbn: string;
-    available: boolean;
-}
+// interface Book {
+//     _id?: string;
+//     title: string;
+//     author: string;
+//     genre: string;
+//     isbn: string;
+//     available: boolean;
+// }
 
 const BookPage: React.FC = () => {
-    const [books, setBooks] = useState<Book[]>([]);
+    const {books, fetchBooks} = useLibrary()
+    //const [books, setBooks] = useState<Book[]>([]);
     const [form, setForm] = useState<Book>({
         title: '',
         author: '',
@@ -22,14 +25,14 @@ const BookPage: React.FC = () => {
     });
     const [editingId, setEditingId] = useState<string | null>(null);
 
-    const fetchBooks = async () => {
-        try {
-            const res = await getAllBooks();
-            setBooks(res);
-        } catch (err) {
-            console.error('Error fetching books:', err);
-        }
-    };
+    // const fetchBooks = async () => {
+    //     try {
+    //         const res = await getAllBooks();
+    //         setBooks(res);
+    //     } catch (err) {
+    //         console.error('Error fetching books:', err);
+    //     }
+    // };
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -73,9 +76,9 @@ const BookPage: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        fetchBooks();
-    }, []);
+    // useEffect(() => {
+    //     fetchBooks();
+    // }, []);
 
     return (
         <div className="min-h-screen w-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 px-4">

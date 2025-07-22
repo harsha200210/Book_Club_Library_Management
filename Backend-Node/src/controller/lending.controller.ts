@@ -16,7 +16,7 @@ export const lendBook = async (req: Request, res: Response, next: NextFunction) 
 
         await lending.save();
 
-        const bookDb = await BookModel.findByIdAndUpdate(lending.book, { available: true }, { new: true });
+        const bookDb = await BookModel.findByIdAndUpdate(lending.book, { available: false });
         if (!bookDb) {
             throw new APIError(404, "Book not found");
         }
@@ -48,7 +48,7 @@ export const returnBook = async (req: Request, res: Response, next: NextFunction
         lending.isReturned = true;
         await lending.save();
 
-        const book = await BookModel.findByIdAndUpdate(lending.book, { available: true }, { new: true });
+        const book = await BookModel.findByIdAndUpdate(lending.book, { available: true });
         if (!book) {
             throw new APIError(404, "Book not found");
         }

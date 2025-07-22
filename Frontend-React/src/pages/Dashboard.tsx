@@ -1,7 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Navbar from '../component/Navbar';
+import {useLibrary} from "../context/useLibrary.ts";
 
 const Dashboard: React.FC = () => {
+    const {fetchBooks, fetchReaders, fetchLendings} = useLibrary();
+
+    useEffect(() => {
+        fetchReaders();
+        fetchBooks();
+        fetchLendings();
+    }, []);
+
     return (
         <div className="min-h-screen w-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 px-4">
             <Navbar />

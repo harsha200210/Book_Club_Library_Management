@@ -21,6 +21,25 @@ const Navbar: React.FC = () => {
                     <li>
                         <Link to="/readers" className="hover:text-indigo-200 transition duration-200">Readers</Link>
                     </li>
+                    <li className="relative group">
+                        <button className="hover:text-indigo-200 transition duration-200">
+                            Lending
+                        </button>
+                        <ul className="absolute left-0 mt-2 w-48 bg-white text-gray-800 shadow-lg rounded-lg opacity-0 group-hover:opacity-100 group-hover:visible invisible transition-opacity duration-200 z-50">
+                            <li>
+                                <Link to="/lending/lend" className="block px-4 py-2 hover:bg-indigo-100">Lend Book</Link>
+                            </li>
+                            <li>
+                                <Link to="/lending/return" className="block px-4 py-2 hover:bg-indigo-100">Return Book</Link>
+                            </li>
+                            <li>
+                                <Link to="/lending/history" className="block px-4 py-2 hover:bg-indigo-100">Lending History</Link>
+                            </li>
+                            <li>
+                                <Link to="/lending/overdue" className="block px-4 py-2 hover:bg-indigo-100">Overdue Books</Link>
+                            </li>
+                        </ul>
+                    </li>
                     <li>
                         <Link to="/profile" className="hover:text-indigo-200 transition duration-200">Profile</Link>
                     </li>

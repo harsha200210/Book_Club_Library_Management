@@ -1,16 +1,19 @@
-import React, {useEffect, useState} from 'react'
+import React, { useState} from 'react'
 import Navbar from "../component/Navbar.tsx";
-import {createReaders, deleteReaders, getAllReaders, updateReaders} from "../api/readerService.ts";
+import {createReaders, deleteReaders, updateReaders} from "../api/readerService.ts";
+import {useLibrary} from "../context/useLibrary.ts";
+import type {Reader} from "../types/Reader.ts";
 
-interface Reader {
-    _id?: string;
-    fullName: string;
-    email: string;
-    contactNumber: string;
-}
+// interface Reader {
+//     _id?: string;
+//     fullName: string;
+//     email: string;
+//     contactNumber: string;
+// }
 
 const ReaderPage: React.FC = () => {
-    const [readers, setReaders] = useState<Reader[]>([]);
+    const {readers, fetchReaders} = useLibrary()
+    // const [readers, setReaders] = useState<Reader[]>([]);
     const [form, setForm] = useState<Reader>({
         fullName: '',
         email: '',
@@ -18,14 +21,14 @@ const ReaderPage: React.FC = () => {
     });
     const [editingId, setEditingId] = useState<string | null>(null);
 
-    const fetchReaders = async () => {
-        try {
-            const res = await getAllReaders();
-            setReaders(res);
-        } catch (err) {
-            console.error('Error fetching readers:', err);
-        }
-    };
+    // const fetchReaders = async () => {
+    //     try {
+    //         const res = await getAllReaders();
+    //         setReaders(res);
+    //     } catch (err) {
+    //         console.error('Error fetching readers:', err);
+    //     }
+    // };
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -69,9 +72,9 @@ const ReaderPage: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        fetchReaders();
-    }, []);
+    // useEffect(() => {
+    //     fetchReaders();
+    // }, []);
 
     return (
         <div className="min-h-screen w-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 px-4">
