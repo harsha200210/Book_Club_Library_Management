@@ -6,6 +6,8 @@ import type {Reader} from "../types/Reader.ts";
 import { LibraryContext } from "./LibraryContext.ts";
 import {getLendingHistory} from "../api/lendingService.ts";
 import type {Lending} from "../types/Lending.ts";
+import type {AuditLog} from "../types/AuditLog.ts";
+import {getAllAuditLog} from "../api/auditService.ts";
 
 interface LibraryProviderProps {
     children: React.ReactNode;
@@ -15,6 +17,7 @@ export const LibraryProvider = ({ children } : LibraryProviderProps) => {
     const [books, setBooks] = useState<Book[]>([]);
     const [readers, setReaders] = useState<Reader[]>([]);
     const [lendings, setLendings] = useState<Lending[]>([]);
+    const [auditLogs, setAuditLogs] = useState<AuditLog[]>([])
 
     const fetchBooks = async () => {
         try {
@@ -43,8 +46,17 @@ export const LibraryProvider = ({ children } : LibraryProviderProps) => {
         }
     }
 
+    const fetchAuditLogs = async () => {
+        try {
+            const res = await getAllAuditLog();
+            setAuditLogs(res)
+        } catch (e) {
+            console.error("Faild to fetch audit logs", e)
+        }
+    }
+
     return (
-        <LibraryContext.Provider value={{ books, readers, lendings, fetchBooks, fetchReaders, fetchLendings }}>
+        <LibraryContext.Provider value={{ books, readers, lendings, auditLogs, fetchBooks, fetchReaders, fetchLendings, fetchAuditLogs }}>
             {children}
         </LibraryContext.Provider>
     );
