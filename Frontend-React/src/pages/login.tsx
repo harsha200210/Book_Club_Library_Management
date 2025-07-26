@@ -3,7 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {login} from "../api/authService.ts";
 import {useAuth} from "../context/useAuth.ts";
 import axios from "axios";
-import toast from "react-hot-toast"
+import {toast} from "react-toastify";
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
@@ -18,7 +18,6 @@ const Login: React.FC = () => {
         try {
             const user = await login({ email, password });
             authenticate(user.accessToken);
-
             navigate("/dashboard");
         } catch (error) {
             if (axios.isAxiosError(error)) {

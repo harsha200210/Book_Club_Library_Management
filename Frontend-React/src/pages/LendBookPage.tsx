@@ -3,6 +3,8 @@ import Navbar from "../component/Navbar.tsx";
 import React from "react";
 import {lendBook} from "../api/lendingService.ts";
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
+import {showError} from "../utils/showToast.ts";
 
 const LendBookPage = () => {
     const navigate = useNavigate();
@@ -14,10 +16,10 @@ const LendBookPage = () => {
         e.preventDefault();
         try {
             await lendBook(selectedBook, selectedReader);
+            toast.success("Lend Book Successfully")
             navigate("/dashboard");
         } catch (error) {
-            console.error("Error lending book:", error);
-            alert("Failed to lend book. Please try again.");
+            showError(error)
         }
     };
 

@@ -10,14 +10,29 @@ import LendingHistoryPage from "./pages/LendingHistoryPage.tsx";
 import OverdueBooksPage from "./pages/OverdueBooksPage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
     return (
         <Router>
+            {/* Toast container should be outside Routes but inside Router */}
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+            />
+
             <Routes>
                 <Route path="/" element={<Login />} />
-                {/* Future protected route */}
-                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/signup" element={<SignUp />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/books" element={<BookPage />} />
                 <Route path="/readers" element={<ReaderPage />} />
                 <Route path="/lending/lend" element={<LendBookPage />} />

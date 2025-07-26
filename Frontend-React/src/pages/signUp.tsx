@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {signUp} from "../api/authService.ts";
-import axios from "axios";
-import toast from "react-hot-toast"
+import {toast} from "react-toastify";
+import {showError} from "../utils/showToast.ts";
 
 function SignUp() {
     const navigate = useNavigate();
@@ -15,9 +15,11 @@ function SignUp() {
     const handleSignUp = async (error : React.FormEvent) => {
         error.preventDefault();
         if (!name || !email || !password || !confirmPassword) {
-            setError('Please fill in all fields');
+            setError('Please fill in all fields')
+            toast.error('Please fill in all fields');
         } else if (password !== confirmPassword) {
-            setError('Passwords do not match');
+            setError('Passwords do not match')
+            toast.error('Passwords do not match');
         } else {
             try {
                 const user = await signUp({ name, email, password, role: "staff" });
@@ -25,12 +27,7 @@ function SignUp() {
                     navigate("/");
                 }
             } catch (error) {
-                if (axios.isAxiosError(error)) {
-                    toast.error(error.message)
-                } else {
-                    setError("Something went wrong");
-                    toast.error("Something went wrong")
-                }
+                showError(error)
             }
         }
 

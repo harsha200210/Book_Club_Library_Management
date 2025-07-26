@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import type { UserWithOutPassword } from '../types/User.ts';
 import { getAllUsers, changePassword } from '../api/authService.ts';
 import Navbar from "../component/Navbar.tsx";
+import {showError} from "../utils/showToast.ts";
+import {toast} from "react-toastify";
 
 const ProfilePage = () => {
     const [users, setUsers] = useState<UserWithOutPassword[]>([]);
@@ -15,8 +17,12 @@ const ProfilePage = () => {
     }, []);
 
     const fetchUsers = async () => {
-        const res = await getAllUsers();
-        setUsers(res);
+        try{
+            const res = await getAllUsers();
+            setUsers(res);
+        } catch (e) {
+            showError(e)
+        }
     };
 
     const handlePasswordChange = async () => {
@@ -29,12 +35,12 @@ const ProfilePage = () => {
                 newPassword,
             });
 
+            toast.success("🗝️ Password change successfully")
             setSelectedUser(null);
             setCurrentPassword('');
             setNewPassword('');
         } catch (error) {
-            alert('Failed to update password. Check current password.');
-            console.error('Failed to update password. Check current password.', error)
+            showError(error)
         }
     };
 

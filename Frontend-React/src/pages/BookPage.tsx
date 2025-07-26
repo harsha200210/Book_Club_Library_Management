@@ -3,6 +3,8 @@ import Navbar from '../component/Navbar';
 import { createBook, deleteBook, updateBook } from "../api/bookService.ts";
 import { useLibrary } from "../context/useLibrary.ts";
 import type { Book } from "../types/Book.ts";
+import {toast} from "react-toastify";
+import {showError} from "../utils/showToast.ts";
 
 const BookPage: React.FC = () => {
     const { books, fetchBooks } = useLibrary();
@@ -29,14 +31,16 @@ const BookPage: React.FC = () => {
         try {
             if (editingId) {
                 await updateBook(editingId, form);
+                toast.success("📘 Book updated successfully");
             } else {
                 await createBook(form);
+                toast.success("📗 Book added successfully");
             }
             setForm({ title: '', author: '', genre: '', isbn: '', available: true });
             setEditingId(null);
             fetchBooks();
         } catch (error) {
-            console.error('Error saving book:', error);
+            showError(error)
         }
     };
 
@@ -48,9 +52,10 @@ const BookPage: React.FC = () => {
     const handleDelete = async (id: string) => {
         try {
             await deleteBook(id);
+            toast.success("🗑️ Book deleted successfully");
             fetchBooks();
         } catch (err) {
-            console.error(err);
+            showError(err)
         }
     };
 

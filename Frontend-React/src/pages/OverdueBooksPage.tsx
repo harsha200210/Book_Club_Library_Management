@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import Navbar from "../component/Navbar.tsx";
 import {getOverDueLend} from "../api/lendingService.ts";
 import type {Lending} from "../types/Lending.ts";
+import {showError} from "../utils/showToast.ts";
 
 const OverdueBooksPage = () => {
     const [overdueLendings, setOverdueLendings] = useState<Lending[]>([]);
@@ -13,7 +14,7 @@ const OverdueBooksPage = () => {
                 const data = await getOverDueLend();
                 setOverdueLendings(data);
             } catch (error) {
-                console.error("Failed to fetch overdue lendings:", error);
+                showError(error)
             }
         };
 

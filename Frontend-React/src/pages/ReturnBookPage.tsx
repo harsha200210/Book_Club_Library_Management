@@ -1,9 +1,10 @@
 import React from "react";
-import toast from "react-hot-toast";
 import { useLibrary } from "../context/useLibrary.ts";
 import { returnBook } from "../api/lendingService.ts";
 import Navbar from "../component/Navbar.tsx";
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
+import {showError} from "../utils/showToast.ts";
 
 const ReturnBookPage = () => {
     const navigate = useNavigate();
@@ -16,12 +17,11 @@ const ReturnBookPage = () => {
 
         try {
             await returnBook(selectedId);
-            toast.success("Book returned successfully!");
+            toast.success("⌛ Book returned successfully!");
             setSelectedId('');
             navigate("/dashboard")
         } catch (error) {
-            console.error("Return error:", error);
-            toast.error("Failed to return book.");
+           showError(error)
         }
     };
 

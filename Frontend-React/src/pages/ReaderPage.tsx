@@ -3,6 +3,8 @@ import Navbar from "../component/Navbar.tsx";
 import { createReaders, deleteReaders, updateReaders } from "../api/readerService.ts";
 import { useLibrary } from "../context/useLibrary.ts";
 import type { Reader } from "../types/Reader.ts";
+import {toast} from "react-toastify";
+import {showError} from "../utils/showToast.ts";
 
 const ReaderPage: React.FC = () => {
     const { readers, fetchReaders } = useLibrary();
@@ -25,14 +27,16 @@ const ReaderPage: React.FC = () => {
         try {
             if (editingId) {
                 await updateReaders(editingId, form);
+                toast.success("👥 Readers update successfully")
             } else {
                 await createReaders(form);
+                toast.success("👥 Readers add successfully")
             }
             setForm({ fullName: '', email: '', contactNumber: '' });
             setEditingId(null);
             fetchReaders();
         } catch (error) {
-            console.error('Error saving reader:', error);
+            showError(error)
         }
     };
 
@@ -44,9 +48,10 @@ const ReaderPage: React.FC = () => {
     const handleDelete = async (id: string) => {
         try {
             await deleteReaders(id);
+            toast.success("🗑️ Readers delete successfully")
             fetchReaders();
         } catch (err) {
-            console.error(err);
+            showError(err)
         }
     };
 
