@@ -38,6 +38,8 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         // });
         //
         // res.json({ token });
+        user.lastLogin = new Date(); // Update last login time
+        await user.save();
 
         // Create tokens
         const accessToken = createAccessToken(user._id, user.role)
@@ -147,5 +149,34 @@ export const logout = (req: Request, res: Response, next: NextFunction) => {
         res.status(200).json({ message: "Logged out successfully" })
     } catch (err) {
         next(err)
+    }
+}
+
+export const changePassword = async (req: Request, res: Response, next: NextFunction) => {
+
+    const { userId, currentPassword, newPassword } = req.body;
+
+    try {
+        const user = await UserModel.findById(userId);
+        if (!user) return next(new APIError(401, "Invalid user"));
+
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) return next(new APIError(401, "Invalid password"));
+
+        user.password = await bcrypt.hash(newPassword, 10);
+        await user.save();
+
+        res.json({ message: 'Password updated successfully' });
+    } catch (e) {
+        next(e)
+    }
+};
+
+export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const users = await UserModel.find().select("-password");
+        res.status(200).json(users);
+    } catch (e) {
+        next(e)
     }
 }

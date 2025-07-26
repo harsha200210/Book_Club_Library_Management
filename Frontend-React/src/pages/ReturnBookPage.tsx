@@ -32,7 +32,7 @@ const ReturnBookPage = () => {
             <Navbar />
             <div className="max-w-5xl mx-auto p-6">
                 <div className="relative bg-white p-8 rounded-2xl shadow-2xl transform transition-all hover:scale-105 hover:shadow-3xl duration-300 mb-8">
-                    <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">📚 Return a Book</h2>
+                    <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">⏳ Return a Book</h2>
                     <div className="space-y-4">
                         <div>
                             <label className="block mb-1 text-sm font-medium text-gray-700">Select a Book to Return</label>

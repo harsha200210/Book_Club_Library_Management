@@ -1,21 +1,12 @@
 import React, { useState } from 'react';
 import Navbar from '../component/Navbar';
-import {createBook, deleteBook, updateBook} from "../api/bookService.ts";
-import {useLibrary} from "../context/useLibrary.ts";
-import type {Book} from "../types/Book.ts";
-
-// interface Book {
-//     _id?: string;
-//     title: string;
-//     author: string;
-//     genre: string;
-//     isbn: string;
-//     available: boolean;
-// }
+import { createBook, deleteBook, updateBook } from "../api/bookService.ts";
+import { useLibrary } from "../context/useLibrary.ts";
+import type { Book } from "../types/Book.ts";
 
 const BookPage: React.FC = () => {
-    const {books, fetchBooks} = useLibrary()
-    //const [books, setBooks] = useState<Book[]>([]);
+    const { books, fetchBooks } = useLibrary();
+
     const [form, setForm] = useState<Book>({
         title: '',
         author: '',
@@ -23,16 +14,9 @@ const BookPage: React.FC = () => {
         isbn: '',
         available: true
     });
-    const [editingId, setEditingId] = useState<string | null>(null);
 
-    // const fetchBooks = async () => {
-    //     try {
-    //         const res = await getAllBooks();
-    //         setBooks(res);
-    //     } catch (err) {
-    //         console.error('Error fetching books:', err);
-    //     }
-    // };
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [searchTerm, setSearchTerm] = useState<string>("");
 
     const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -42,24 +26,18 @@ const BookPage: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (editingId) {
-            try {
+        try {
+            if (editingId) {
                 await updateBook(editingId, form);
-            } catch (error) {
-                console.error('Error updating book:', error);
+            } else {
+                await createBook(form);
             }
-
-        } else {
-            try {
-                await createBook(form)
-            } catch (error) {
-                console.error('Error creating book:', error);
-            }
+            setForm({ title: '', author: '', genre: '', isbn: '', available: true });
+            setEditingId(null);
+            fetchBooks();
+        } catch (error) {
+            console.error('Error saving book:', error);
         }
-
-        setForm({ title: '', author: '', genre: '', isbn: '', available: true });
-        setEditingId(null);
-        fetchBooks();
     };
 
     const handleEdit = (book: Book) => {
@@ -69,16 +47,18 @@ const BookPage: React.FC = () => {
 
     const handleDelete = async (id: string) => {
         try {
-            await deleteBook(id)
+            await deleteBook(id);
             fetchBooks();
         } catch (err) {
             console.error(err);
         }
     };
 
-    // useEffect(() => {
-    //     fetchBooks();
-    // }, []);
+    const filteredBooks = books.filter((book) =>
+        book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        book.genre.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div className="min-h-screen w-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 px-4">
@@ -94,7 +74,7 @@ const BookPage: React.FC = () => {
                                 placeholder="Title"
                                 value={form.title}
                                 onChange={handleInput}
-                                className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
+                                className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-500"
                                 required
                             />
                             <input
@@ -103,7 +83,7 @@ const BookPage: React.FC = () => {
                                 placeholder="Author"
                                 value={form.author}
                                 onChange={handleInput}
-                                className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
+                                className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-500"
                                 required
                             />
                             <input
@@ -112,7 +92,7 @@ const BookPage: React.FC = () => {
                                 placeholder="Genre"
                                 value={form.genre}
                                 onChange={handleInput}
-                                className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
+                                className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-500"
                             />
                             <input
                                 type="text"
@@ -120,7 +100,7 @@ const BookPage: React.FC = () => {
                                 placeholder="ISBN"
                                 value={form.isbn}
                                 onChange={handleInput}
-                                className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder:text-gray-500 placeholder:italic"
+                                className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-500"
                             />
                         </div>
                         <button
@@ -131,53 +111,60 @@ const BookPage: React.FC = () => {
                         </button>
                     </form>
                 </div>
-                <div className="mt-8 overflow-x-auto">
-                    <table className="w-full bg-white rounded-2xl shadow-2xl text-left">
-                        <thead>
-                        <tr className="bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 text-black">
-                            <th className="p-4 rounded-tl-2xl">Title</th>
-                            <th className="p-4">Author</th>
-                            <th className="p-4">Genre</th>
-                            <th className="p-4">ISBN</th>
-                            <th className="p-4">Available</th>
-                            <th className="p-4 rounded-tr-2xl">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {books.map((book) => (
-                            <tr key={book._id} className="border-t hover:bg-gray-100 transition duration-200 text-black">
-                                <td className="p-4">{book.title}</td>
-                                <td className="p-4">{book.author}</td>
-                                <td className="p-4">{book.genre}</td>
-                                <td className="p-4">{book.isbn}</td>
-                                <td className="p-4">
-                                    {book.available ? '✅ Yes' : '❌ No'}
-                                </td>
-                                <td className="p-4 flex gap-2">
-                                    <button
-                                        onClick={() => handleEdit(book)}
-                                        className="bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition duration-200 font-semibold"
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        onClick={() => handleDelete(book._id || '')}
-                                        className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition duration-200 font-semibold"
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
+                <div className="relative bg-white p-8 rounded-2xl shadow-2xl transform transition-all hover:scale-105 hover:shadow-3xl duration-300">
+                    <input
+                        type="text"
+                        placeholder="Search by title, author, or genre..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full px-4 py-3 border text-black border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-gray-500 mb-6"
+                    />
+                    <div className="overflow-x-auto">
+                        <table className="w-full bg-white rounded-2xl text-left">
+                            <thead>
+                            <tr className="bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 text-white">
+                                <th className="p-4 rounded-tl-2xl">Title</th>
+                                <th className="p-4">Author</th>
+                                <th className="p-4">Genre</th>
+                                <th className="p-4">ISBN</th>
+                                <th className="p-4">Available</th>
+                                <th className="p-4 rounded-tr-2xl">Actions</th>
                             </tr>
-                        ))}
-                        {books.length === 0 && (
-                            <tr>
-                                <td className="p-4 text-gray-600" colSpan={6}>
-                                    No books found.
-                                </td>
-                            </tr>
-                        )}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            {filteredBooks.map((book) => (
+                                <tr key={book._id} className="border-t hover:bg-gray-100 transition duration-200 text-black">
+                                    <td className="p-4">{book.title}</td>
+                                    <td className="p-4">{book.author}</td>
+                                    <td className="p-4">{book.genre}</td>
+                                    <td className="p-4">{book.isbn}</td>
+                                    <td className="p-4">{book.available ? '✅ Yes' : '❌ No'}</td>
+                                    <td className="p-4 flex gap-2">
+                                        <button
+                                            onClick={() => handleEdit(book)}
+                                            className="bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 font-semibold"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(book._id || '')}
+                                            className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 font-semibold"
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                            {filteredBooks.length === 0 && (
+                                <tr>
+                                    <td className="p-4 text-gray-600" colSpan={6}>
+                                        No books found.
+                                    </td>
+                                </tr>
+                            )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

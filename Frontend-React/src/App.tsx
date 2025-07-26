@@ -8,6 +8,7 @@ import LendBookPage from "./pages/LendBookPage.tsx";
 import ReturnBookPage from "./pages/ReturnBookPage.tsx";
 import LendingHistoryPage from "./pages/LendingHistoryPage.tsx";
 import OverdueBooksPage from "./pages/OverdueBooksPage.tsx";
+import ProfilePage from "./pages/ProfilePage.tsx";
 
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/lending/return" element={<ReturnBookPage />} />
                 <Route path="/lending/history" element={<LendingHistoryPage />} />
                 <Route path="/lending/overdue" element={<OverdueBooksPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
             </Routes>
         </Router>
     );
