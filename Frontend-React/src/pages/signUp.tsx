@@ -36,7 +36,7 @@ function SignUp() {
     return (
         <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900 px-4">
             <div className="relative bg-white p-10 rounded-2xl shadow-2xl w-full max-w-md transform transition-all hover:scale-105 hover:shadow-3xl duration-300">
-                <h2 className="text-3xl font-extrabold mb-6 text-center text-gray-800">Library Sign Up</h2>
+                <h2 className="text-2xl md:text-3xl font-extrabold mb-6 text-center text-gray-800">Library Sign Up</h2>
 
                 {error && (
                     <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-6 text-sm animate-pulse">
